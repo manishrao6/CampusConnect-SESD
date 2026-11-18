@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}{{ event.title }}{% endblock %}
+{% block content %}
+<div class="page-top"><div class="container"><a class="back-link" href="{{ url_for('index') }}"><i class="bi bi-arrow-left"></i> All events</a></div></div>
+<section class="detail-section"><div class="container"><div class="row g-5">
+  <div class="col-lg-7">
+    <div class="detail-banner banner-{{ event.id % 4 }}"><span class="category-pill">{{ event.category }}</span><span class="detail-banner-icon"><i class="bi bi-calendar-event"></i></span></div>
+    <span class="section-kicker mt-4 d-inline-block">CAMPUS EVENT</span><h1 class="detail-title">{{ event.title }}</h1>
+    <p class="detail-description">{{ event.description }}</p>
+    <div class="detail-info-grid">
+      <div class="detail-info"><div class="detail-info-icon"><i class="bi bi-calendar3"></i></div><div><span>Date</span><strong>{{ event.event_date }}</strong></div></div>
+      <div class="detail-info"><div class="detail-info-icon"><i class="bi bi-clock"></i></div><div><span>Start time</span><strong>{{ event.event_time }}</strong></div></div>
+      <div class="detail-info"><div class="detail-info-icon"><i class="bi bi-geo-alt"></i></div><div><span>Venue</span><strong>{{ event.venue }}</strong></div></div>
+      <div class="detail-info"><div class="detail-info-icon"><i class="bi bi-person-badge"></i></div><div><span>Organizer</span><strong>{{ event.organizer }}</strong></div></div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="registration-card">
+      <span class="section-kicker">SAVE YOUR SPOT</span><h2>Join this event.</h2><p class="muted">Fill in your details to register for this campus experience.</p>
+      <div class="seat-progress"><div class="d-flex justify-content-between"><span>Seats filled</span><strong>{{ event.registered }} / {{ event.capacity }}</strong></div><div class="progress mt-2"><div class="progress-bar" style="width: {{ [event.registered * 100 / event.capacity, 100]|min }}%"></div></div><small>{{ [event.capacity - event.registered, 0]|max }} seats remaining</small></div>
+      {% if event.registered < event.capacity %}
+      <form method="post" action="{{ url_for('register', event_id=event.id) }}" class="registration-form">
+        <label class="form-label" for="student_name">Full name</label><input class="form-control" id="student_name" name="student_name" placeholder="Your full name" required>
+        <label class="form-label" for="student_email">College email</label><input class="form-control" id="student_email" name="student_email" type="email" placeholder="you@example.com" required>
+        <label class="form-label" for="department">Department</label><select class="form-select" id="department" name="department" required><option value="">Select department</option><option>CSE</option><option>ECE</option><option>EEE</option><option>Mechanical</option><option>Civil</option><option>IT</option><option>Other</option></select>
+        <button class="btn btn-primary w-100 btn-lg mt-3" type="submit">Register for event <i class="bi bi-arrow-right ms-2"></i></button>
+      </form>
+      {% else %}<div class="alert alert-warning mt-4 mb-0">This event is fully booked.</div>{% endif %}
+      <div class="privacy-note"><i class="bi bi-shield-check"></i> Your registration is stored securely in the event database.</div>
+    </div>
+  </div>
+</div></div></section>
+{% endblock %}

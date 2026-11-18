@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Attendees · {{ event.title }}{% endblock %}
+{% block content %}
+<section class="form-page"><div class="container"><a class="back-link" href="{{ url_for('admin_dashboard') }}"><i class="bi bi-arrow-left"></i> Dashboard</a><div class="section-heading mt-4"><div><span class="section-kicker">ATTENDEE LIST</span><h2>{{ event.title }}</h2><p>{{ people|length }} student registration{% if people|length != 1 %}s{% endif %} recorded.</p></div><a class="btn btn-primary" href="{{ url_for('event_detail', event_id=event.id) }}">View public page</a></div>
+<div class="table-panel mt-4">{% if people %}<div class="table-responsive"><table class="table align-middle"><thead><tr><th>#</th><th>Student name</th><th>Email</th><th>Department</th><th>Registered at</th></tr></thead><tbody>{% for person in people %}<tr><td>{{ loop.index }}</td><td><strong>{{ person.student_name }}</strong></td><td>{{ person.student_email }}</td><td><span class="category-pill light-pill">{{ person.department }}</span></td><td>{{ person.registered_at }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state"><div class="empty-icon"><i class="bi bi-person-plus"></i></div><h3>No registrations yet</h3><p>Student registrations will appear here.</p></div>{% endif %}</div></div></section>
+{% endblock %}

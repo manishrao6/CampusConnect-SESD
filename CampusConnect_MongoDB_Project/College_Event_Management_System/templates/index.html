@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% block title %}Discover events{% endblock %}
+{% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow"><span class="eyebrow-dot"></span> YOUR CAMPUS, YOUR COMMUNITY</span>
+      <h1>Make room for<br><span>something memorable.</span></h1>
+      <p>Find campus events, meet your people, and turn your college days into stories worth telling.</p>
+      <a class="btn btn-primary btn-lg hero-btn" href="#events">Explore events <i class="bi bi-arrow-down-right ms-2"></i></a>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
+      <div class="art-card card-top"><i class="bi bi-mic-fill"></i><span>Ideas on stage</span></div>
+      <div class="art-calendar"><div class="cal-top">CAMPUS CALENDAR</div><div class="cal-date">18<span>NOV</span></div><div class="cal-line"></div><div class="cal-bottom"><i class="bi bi-stars"></i> Your next big thing</div></div>
+      <div class="art-card card-bottom"><i class="bi bi-people-fill"></i><span>Find your crew</span></div>
+      <div class="art-spark spark-one">✳</div><div class="art-spark spark-two">✦</div>
+    </div>
+  </div>
+</section>
+<section class="stats-strip">
+  <div class="container stats-grid">
+    <div class="stat-item"><div class="stat-icon"><i class="bi bi-calendar2-week"></i></div><div><strong>{{ total }}</strong><span>Events listed</span></div></div>
+    <div class="stat-item"><div class="stat-icon coral"><i class="bi bi-person-check"></i></div><div><strong>{{ registrations }}</strong><span>Registrations</span></div></div>
+    <div class="stat-item"><div class="stat-icon gold"><i class="bi bi-lightning-charge"></i></div><div><strong>One place</strong><span>For campus life</span></div></div>
+  </div>
+</section>
+<section class="events-section" id="events">
+  <div class="container">
+    <div class="section-heading">
+      <div><span class="section-kicker">WHAT'S HAPPENING</span><h2>Find your next <span>favorite.</span></h2><p>From big ideas to unforgettable evenings, there is something for everyone.</p></div>
+      <span class="event-count">{{ events|length }} event{% if events|length != 1 %}s{% endif %} found</span>
+    </div>
+    <form class="filter-bar" method="get" action="{{ url_for('index') }}">
+      <div class="search-field"><i class="bi bi-search"></i><input name="q" value="{{ search }}" placeholder="Search events, venues, organizers..." aria-label="Search events"></div>
+      <select name="category" class="form-select category-select" aria-label="Filter by category">
+        <option value="">All categories</option>
+        {% for item in categories %}<option value="{{ item.category }}" {% if selected_category == item.category %}selected{% endif %}>{{ item.category }}</option>{% endfor %}
+      </select>
+      <button class="btn btn-primary filter-btn" type="submit">Find events</button>
+      {% if search or selected_category %}<a class="btn btn-light clear-btn" href="{{ url_for('index') }}">Clear</a>{% endif %}
+    </form>
+    {% if events %}
+    <div class="row g-4 event-grid">
+      {% for event in events %}
+      <div class="col-md-6 col-xl-4">
+        <article class="event-card">
+          <div class="event-card-banner banner-{{ loop.index0 % 4 }}">
+            <span class="category-pill">{{ event.category }}</span>
+            <span class="banner-symbol">{% if event.category == 'Technical' %}<i class="bi bi-code-slash"></i>{% elif event.category == 'Cultural' %}<i class="bi bi-music-note-beamed"></i>{% elif event.category == 'Social' %}<i class="bi bi-flower1"></i>{% else %}<i class="bi bi-stars"></i>{% endif %}</span>
+            <div class="date-stamp"><strong>{{ event.event_date[8:10] }}</strong><span>{{ event.event_date[5:7] }}</span></div>
+          </div>
+          <div class="event-card-body">
+            <div class="event-meta"><span><i class="bi bi-clock"></i> {{ event.event_time }}</span><span><i class="bi bi-people"></i> {{ event.registered }}/{{ event.capacity }}</span></div>
+            <h3>{{ event.title }}</h3>
+            <p class="event-description">{{ event.description }}</p>
+            <div class="event-location"><i class="bi bi-geo-alt"></i><span>{{ event.venue }}</span></div>
+            <div class="event-card-footer"><span class="organizer">By {{ event.organizer }}</span><a href="{{ url_for('event_detail', event_id=event.id) }}" class="text-link">View details <i class="bi bi-arrow-up-right"></i></a></div>
+          </div>
+        </article>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state"><div class="empty-icon"><i class="bi bi-calendar-x"></i></div><h3>No events found</h3><p>Try another search term or clear the filters to see all events.</p><a class="btn btn-primary" href="{{ url_for('index') }}">Show all events</a></div>
+    {% endif %}
+  </div>
+</section>
+<section class="bottom-cta"><div class="container cta-inner"><div><span class="section-kicker">RUNNING AN EVENT?</span><h2>Bring your campus idea to life.</h2><p>Keep event details and student registrations organized in one place.</p></div><a class="btn btn-light btn-lg" href="{{ url_for('admin_login') }}">Manage events <i class="bi bi-arrow-right ms-2"></i></a></div></section>
+{% endblock %}

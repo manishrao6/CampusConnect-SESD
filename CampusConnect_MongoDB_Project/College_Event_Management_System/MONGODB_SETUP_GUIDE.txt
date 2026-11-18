@@ -1,0 +1,33 @@
+CAMPUSCONNECT — MONGODB SETUP (WINDOWS)
+
+1. Open Windows Services:
+   Press Win + R, type services.msc, press Enter.
+2. Find the MongoDB Server service (may appear as MongoDB).
+3. If its status is Stopped, right-click and choose Start.
+4. Open MongoDB Compass.
+5. Connect using:
+   mongodb://127.0.0.1:27017/
+6. Open this project folder in VS Code (the folder containing app.py).
+7. Open Terminal > New Terminal.
+8. Run these commands one by one:
+
+   py -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   python -m pip install -r requirements.txt
+   python app.py
+
+9. Open http://127.0.0.1:5000 in Chrome.
+10. In Compass, refresh the connection. Open database campusconnect.
+    The events, registrations, and counters collections should appear.
+
+Student registrations are stored in campusconnect > registrations.
+Event records are stored in campusconnect > events.
+
+Admin demo login:
+URL: http://127.0.0.1:5000/admin/login
+Username: admin
+Password: admin123
+
+If the app says it cannot connect to MongoDB, check that the MongoDB
+Server Windows service is running and that the connection address is
+mongodb://127.0.0.1:27017/.
